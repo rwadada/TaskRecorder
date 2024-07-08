@@ -15,7 +15,7 @@ import kotlinx.datetime.format.byUnicodePattern
 import ui.extension.toDisplayDurationString
 
 data class UiState(
-    val workTitle: String = "sample",
+    val workTitle: String = "",
     val currentDateTimeString: String = "",
     val inProgress: Boolean = false,
     val elapsedTimeString: String = "00:00",
@@ -68,6 +68,7 @@ class MainViewModel : ViewModel(), MainUiEvent {
         startDateTime = null
         _uiState.update {
             it.copy(
+                workTitle = "",
                 inProgress = false,
                 elapsedTimeString = "00:00",
                 workHistryList = it.workHistryList + newWorkHistory
@@ -93,6 +94,14 @@ class MainViewModel : ViewModel(), MainUiEvent {
         }
     }
 
+    override fun onWorkTitleChange(value: String) {
+        _uiState.update {
+            uiState.value.copy(
+                workTitle = value
+            )
+        }
+    }
+
     @OptIn(FormatStringsInDatetimeFormats::class)
     private fun updateCurrentDateTime() {
         val format: DateTimeFormat<LocalDateTime> = LocalDateTime.Format {
@@ -105,7 +114,7 @@ class MainViewModel : ViewModel(), MainUiEvent {
                     currentDateTimeString = newDateTimeString,
                     elapsedTimeString = if (it.inProgress) {
                         val workHistory = WorkHistory.create(
-                            title = "sample",
+                            title = uiState.value.workTitle,
                             startDateTime = startDateTime ?: currentDateTime.value,
                             endDateTime = currentDateTime.value
                         )
@@ -135,4 +144,5 @@ interface MainUiEvent {
     fun onClickTaskDropDown()
     fun onLoadCurrentDateTime()
     fun onClickClear()
+    fun onWorkTitleChange(value: String)
 }

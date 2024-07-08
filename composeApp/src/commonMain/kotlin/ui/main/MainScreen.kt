@@ -46,9 +46,9 @@ fun MainScreen() {
     ) {
         TitleHeader(title = "TASK RECORDER")
         Spacer(modifier = Modifier.height(16.dp))
-        DropDownButton(
-            selectedItemString = "sample",
-            onClick = uiEventHandler::onClickTaskDropDown
+        TmpDropDownButton(
+            text = uiState.workTitle,
+            onValueChange = uiEventHandler::onWorkTitleChange
         )
 
         SubTitle(
