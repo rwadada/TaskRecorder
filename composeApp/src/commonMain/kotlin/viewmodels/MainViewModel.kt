@@ -2,18 +2,24 @@ package viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.flow.*
+import data.WorkHistory
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.datetime.*
 import kotlinx.datetime.format.DateTimeFormat
 import kotlinx.datetime.format.FormatStringsInDatetimeFormats
 import kotlinx.datetime.format.byUnicodePattern
-import kotlin.time.Duration
+import ui.extension.toDisplayDurationString
 
 data class UiState(
+    val workTitle: String = "sample",
     val currentDateTimeString: String = "",
     val inProgress: Boolean = false,
-    val elapsedTimeString: String = "00:00"
+    val elapsedTimeString: String = "00:00",
+    val workHistryList: List<WorkHistory> = emptyList()
 )
 
 class MainViewModel : ViewModel(), MainUiEvent {
@@ -37,21 +43,35 @@ class MainViewModel : ViewModel(), MainUiEvent {
 
     override fun onClickStartOrStop() {
         if (uiState.value.inProgress) {
-            startDateTime = null
-            _uiState.update {
-                it.copy(
-                    inProgress = false,
-                    elapsedTimeString = "00:00"
-                )
-            }
+            onStopProgress()
         } else {
-            startDateTime = currentDateTime.value
-            _uiState.update {
-                it.copy(
-                    inProgress = true,
-                    elapsedTimeString = "00:00"
-                )
-            }
+            onStartProgress()
+        }
+    }
+
+    private fun onStartProgress() {
+        startDateTime = currentDateTime.value
+        _uiState.update {
+            it.copy(
+                inProgress = true,
+                elapsedTimeString = "00:00"
+            )
+        }
+    }
+
+    private fun onStopProgress() {
+        val newWorkHistory: WorkHistory = WorkHistory.create(
+            title = uiState.value.workTitle,
+            startDateTime = startDateTime ?: currentDateTime.value,
+            endDateTime = currentDateTime.value
+        )
+        startDateTime = null
+        _uiState.update {
+            it.copy(
+                inProgress = false,
+                elapsedTimeString = "00:00",
+                workHistryList = it.workHistryList + newWorkHistory
+            )
         }
     }
 
@@ -70,22 +90,18 @@ class MainViewModel : ViewModel(), MainUiEvent {
         val format: DateTimeFormat<LocalDateTime> = LocalDateTime.Format {
             byUnicodePattern("yyyy/MM/dd HH:mm")
         }
-        val newDateTimeString = currentDateTime.value.format(format)
+        val newDateTimeString: String = currentDateTime.value.format(format)
         if (uiState.value.currentDateTimeString != newDateTimeString) {
             _uiState.update {
                 uiState.value.copy(
                     currentDateTimeString = newDateTimeString,
                     elapsedTimeString = if (it.inProgress) {
-                        val currentInstant: Instant = currentDateTime.value.toInstant(TimeZone.currentSystemDefault())
-                        val startInstant: Instant = startDateTime!!.toInstant(TimeZone.currentSystemDefault())
-                        val duration: Duration = currentInstant - startInstant
-                        val totalMinutes: Long = duration.inWholeMinutes
-                        val hours: Long = totalMinutes / 60
-                        val minutes: Long = totalMinutes % 60
-
-                        val formattedDifference =
-                            "${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}"
-                        formattedDifference
+                        val workHistory = WorkHistory.create(
+                            title = "sample",
+                            startDateTime = currentDateTime.value,
+                            endDateTime = startDateTime ?: currentDateTime.value
+                        )
+                        workHistory.toDisplayDurationString()
                     } else {
                         ""
                     }
