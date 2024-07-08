@@ -1,6 +1,7 @@
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import java.util.*
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
@@ -55,6 +56,12 @@ kotlin {
     }
 }
 
+fun readPropertie(propertiesFile: File) = Properties().apply {
+    propertiesFile.inputStream().use { fis ->
+        load(fis)
+    }
+}
+
 android {
     namespace = "com.rwadada.taskrecorder"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
@@ -78,6 +85,7 @@ android {
     buildTypes {
         getByName("release") {
             isMinifyEnabled = false
+            signingConfig = signingConfigs.getByName("release")
         }
     }
     compileOptions {
@@ -89,6 +97,15 @@ android {
     }
     dependencies {
         debugImplementation(compose.uiTooling)
+    }
+    signingConfigs {
+        create("release") {
+            val keyProperties = readPropertie(file("../androidApp/key.properties"))
+            storeFile = file(keyProperties["storeFile"] as String)
+            storePassword = keyProperties["storePassword"] as String
+            keyAlias = keyProperties["keyAlias"] as String
+            keyPassword = keyProperties["keyPassword"] as String
+        }
     }
 }
 
