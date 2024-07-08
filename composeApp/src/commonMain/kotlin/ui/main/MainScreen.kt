@@ -12,10 +12,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.delay
 import org.jetbrains.compose.ui.tooling.preview.Preview
-import ui.common.DropDownButton
-import ui.common.NormalButton
-import ui.common.SubTitle
-import ui.common.TitleHeader
+import ui.common.*
 import viewmodels.MainUiEvent
 import viewmodels.MainViewModel
 import viewmodels.UiState
@@ -83,13 +80,21 @@ fun MainScreen() {
                 subTitle = "HISTORY",
                 modifier = Modifier.padding(top = 24.dp)
             )
-        }
 
-        LazyColumn(
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            items(uiState.workHistryList) {
-                HistoryItem(it)
+            LazyColumn(
+                modifier = Modifier.fillMaxWidth(),
+                verticalArrangement = Arrangement.spacedBy(4.dp)
+            ) {
+                items(uiState.workHistryList) {
+                    HistoryItem(it)
+                }
+                item {
+                    SubButton(
+                        text = "CLEAR",
+                        modifier = Modifier.fillMaxWidth(),
+                        onClick = uiEventHandler::onClickClear
+                    )
+                }
             }
         }
     }

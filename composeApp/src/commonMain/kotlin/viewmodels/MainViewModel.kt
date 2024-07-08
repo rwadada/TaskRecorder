@@ -85,6 +85,14 @@ class MainViewModel : ViewModel(), MainUiEvent {
         }
     }
 
+    override fun onClickClear() {
+        _uiState.update {
+            uiState.value.copy(
+                workHistryList = emptyList()
+            )
+        }
+    }
+
     @OptIn(FormatStringsInDatetimeFormats::class)
     private fun updateCurrentDateTime() {
         val format: DateTimeFormat<LocalDateTime> = LocalDateTime.Format {
@@ -98,8 +106,8 @@ class MainViewModel : ViewModel(), MainUiEvent {
                     elapsedTimeString = if (it.inProgress) {
                         val workHistory = WorkHistory.create(
                             title = "sample",
-                            startDateTime = currentDateTime.value,
-                            endDateTime = startDateTime ?: currentDateTime.value
+                            startDateTime = startDateTime ?: currentDateTime.value,
+                            endDateTime = currentDateTime.value
                         )
                         workHistory.toDisplayDurationString()
                     } else {
@@ -126,4 +134,5 @@ interface MainUiEvent {
     fun onClickStartOrStop()
     fun onClickTaskDropDown()
     fun onLoadCurrentDateTime()
+    fun onClickClear()
 }
