@@ -46,11 +46,11 @@ kotlin {
             implementation(compose.components.uiToolingPreview)
             implementation(libs.viewmodel)
             implementation(libs.datetime)
-            implementation(project.dependencies.platform("io.insert-koin:koin-bom:3.5.6"))
-            implementation("io.insert-koin:koin-core")
+            implementation(libs.coroutines)
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
+            implementation(libs.coroutines.desktop)
         }
     }
 }

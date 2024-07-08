@@ -4,25 +4,46 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import kotlinx.datetime.*
-import kotlinx.datetime.format.FormatStringsInDatetimeFormats
-import kotlinx.datetime.format.byUnicodePattern
+import androidx.lifecycle.ViewModelProvider
+import kotlinx.coroutines.delay
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import ui.common.DropDownButton
 import ui.common.NormalButton
 import ui.common.SubTitle
 import ui.common.TitleHeader
+import viewmodels.MainUiEvent
+import viewmodels.MainViewModel
+import viewmodels.UiState
 
-@OptIn(FormatStringsInDatetimeFormats::class)
 @Composable
 @Preview
 fun MainScreen() {
+    val viewModel: MainViewModel = MainViewModel.getInstance()
+    val uiEventHandler: MainUiEvent = viewModel
+    val uiState: UiState by viewModel.uiState.collectAsState()
+
+    var shouldCollectLocalDateTime = false
+
+    LaunchedEffect(Unit) {
+        shouldCollectLocalDateTime = true
+        while (shouldCollectLocalDateTime) {
+            uiEventHandler.onLoadCurrentDateTime()
+            delay(1000)
+        }
+    }
+
+    DisposableEffect(Unit) {
+        onDispose {
+            shouldCollectLocalDateTime = false
+        }
+    }
+
     Column(
         modifier = Modifier.fillMaxSize()
             .padding(16.dp)
@@ -31,7 +52,7 @@ fun MainScreen() {
         Spacer(modifier = Modifier.height(16.dp))
         DropDownButton(
             selectedItemString = "sample",
-            onClick = {}
+            onClick = uiEventHandler::onClickTaskDropDown
         )
 
         SubTitle(
@@ -39,13 +60,8 @@ fun MainScreen() {
             modifier = Modifier.padding(top = 24.dp)
         )
 
-        val today = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
-        val format = LocalDateTime.Format {
-            byUnicodePattern("yyyy/MM/dd HH:mm")
-        }
-        val displayDateTimeString = today.format(format)
         Text(
-            text = displayDateTimeString,
+            text = uiState.currentDateTimeString,
             fontSize = 20.sp,
             fontWeight = FontWeight.Bold,
             textAlign = TextAlign.Center,
@@ -54,9 +70,13 @@ fun MainScreen() {
         )
 
         NormalButton(
-            text = "START",
+            text = if (uiState.inProgress) {
+                "IN PROGRESS - (${uiState.elapsedTimeString})"
+            } else {
+                "START"
+            },
             modifier = Modifier.fillMaxWidth(),
-            onClick = {}
+            onClick = uiEventHandler::onClickStartOrStop
         )
 
         Column(
