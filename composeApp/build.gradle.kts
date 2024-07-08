@@ -118,8 +118,17 @@ compose.desktop {
 
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
-            packageName = "com.rwadada.taskrecorder"
+            packageName = "TaskRecorder"
             packageVersion = "1.0.0"
+            macOS {
+                iconFile.set(project.file("ic_launcher.icns"))
+            }
+            windows {
+                iconFile.set(project.file("ic_launcher.ico"))
+            }
+            linux {
+                iconFile.set(project.file("ic_launcher.png"))
+            }
         }
     }
 }
