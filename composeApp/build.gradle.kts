@@ -82,6 +82,15 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+    signingConfigs {
+        create("release") {
+            val keyProperties = readPropertie(file("../androidApp/key.properties"))
+            storeFile = file(keyProperties["storeFile"] as String)
+            storePassword = keyProperties["storePassword"] as String
+            keyAlias = keyProperties["keyAlias"] as String
+            keyPassword = keyProperties["keyPassword"] as String
+        }
+    }
     buildTypes {
         getByName("release") {
             isMinifyEnabled = false
@@ -97,15 +106,6 @@ android {
     }
     dependencies {
         debugImplementation(compose.uiTooling)
-    }
-    signingConfigs {
-        create("release") {
-            val keyProperties = readPropertie(file("../androidApp/key.properties"))
-            storeFile = file(keyProperties["storeFile"] as String)
-            storePassword = keyProperties["storePassword"] as String
-            keyAlias = keyProperties["keyAlias"] as String
-            keyPassword = keyProperties["keyPassword"] as String
-        }
     }
 }
 
