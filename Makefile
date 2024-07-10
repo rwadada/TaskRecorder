@@ -9,5 +9,6 @@ bundleAndroidRelease: ## リリース用のAppBundle(.aab)を生成する
 	./gradlew bundleRelease
 	open composeApp/build/outputs/bundle/release/
 
-bundleDesktopRelease:
+bundleDesktopRelease: ## リリース用のDesto用バイナリを生成する
 	./gradlew package
+	open composeApp/build/compose/binaries/main/
