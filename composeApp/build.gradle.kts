@@ -119,7 +119,7 @@ compose.desktop {
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
             packageName = "TaskRecorder"
-            packageVersion = "1.0.0"
+            packageVersion = "1.0.1"
             macOS {
                 iconFile.set(project.file("ic_launcher.icns"))
             }

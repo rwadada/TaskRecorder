@@ -3,6 +3,7 @@ package ui.main
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -10,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import data.WorkHistory
 import ui.common.SubTitle
 import ui.extension.toDisplayDurationString
@@ -28,13 +30,19 @@ fun HistoryItem(item: WorkHistory) {
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        SubTitle(
-            subTitle = item.title,
-            modifier = Modifier.weight(1f)
-        )
+        Box(modifier = Modifier.weight(1f)) {
+            SelectionContainer{
+                Text(
+                    text = item.title,
+                    fontSize = 13.sp
+                )
+            }
+        }
 
-        Text(
-            text = item.toDisplayDurationString()
-        )
+        SelectionContainer{
+            Text(
+                text = item.toDisplayDurationString()
+            )
+        }
     }
 }
