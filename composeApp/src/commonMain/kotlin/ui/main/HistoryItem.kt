@@ -13,7 +13,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import data.WorkHistory
-import ui.common.SubTitle
 import ui.extension.toDisplayDurationString
 
 @Composable
