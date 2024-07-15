@@ -3,6 +3,8 @@ package viewmodels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import data.WorkHistory
+import data.repository.Routing
+import data.repository.RoutingRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -22,7 +24,9 @@ data class UiState(
     val workHistryList: List<WorkHistory> = emptyList()
 )
 
-class MainViewModel : ViewModel(), MainUiEvent {
+class MainViewModel(
+    private val routingRepository: RoutingRepository
+) : ViewModel(), MainUiEvent {
     private val _uiState: MutableStateFlow<UiState> = MutableStateFlow(UiState())
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
 
@@ -42,6 +46,7 @@ class MainViewModel : ViewModel(), MainUiEvent {
     }
 
     override fun onClickStartOrStop() {
+        routingRepository.navigateTo(Routing.SelectTask)
         if (uiState.value.inProgress) {
             onStopProgress()
         } else {

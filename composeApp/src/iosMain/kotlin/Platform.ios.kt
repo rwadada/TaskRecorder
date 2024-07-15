@@ -1,3 +1,4 @@
+import androidx.compose.runtime.Composable
 import platform.UIKit.UIDevice
 
 class IOSPlatform: Platform {
@@ -5,3 +6,9 @@ class IOSPlatform: Platform {
 }
 
 actual fun getPlatform(): Platform = IOSPlatform()
+
+@Composable
+actual fun finishApp() {
+    // do nothing
+    // Appleのガイドラインではアプリケーションがユーザーによって終了されるべきであり、プログラムから終了することは推奨されてないため。
+}
