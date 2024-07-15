@@ -6,6 +6,9 @@ import data.repository.RoutingRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-class MainRouterViewModel(routingRepository: RoutingRepository) : ViewModel() {
+class MainRouterViewModel(private val routingRepository: RoutingRepository) : ViewModel() {
     val navigationEvent: Flow<Routing?> = routingRepository.routingStack.map { it.lastOrNull() }
+    fun onFinish() {
+        routingRepository.clearBackStack()
+    }
 }
