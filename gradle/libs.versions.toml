@@ -6,6 +6,8 @@ android-targetSdk = "34"
 androidx-activityCompose = "1.9.0"
 compose-plugin = "1.6.11"
 kotlin = "2.0.0"
+koin = "3.6.0-Beta4"
+koinComposeMultiplatform = "1.2.0-Beta4"
 
 [libraries]
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activityCompose" }
@@ -13,6 +15,9 @@ datetime = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime", version
 viewmodel = { group = "androidx.lifecycle", name = "lifecycle-viewmodel", version = "2.8.3" }
 coroutines = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version = "1.8.1" }
 coroutines-desktop= { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-swing", version = "1.8.1" }
+koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin" }
+koin-compose = { module = "io.insert-koin:koin-compose", version.ref = "koinComposeMultiplatform" }
+koin-composeVM = { module = "io.insert-koin:koin-compose-viewmodel", version.ref = "koinComposeMultiplatform" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

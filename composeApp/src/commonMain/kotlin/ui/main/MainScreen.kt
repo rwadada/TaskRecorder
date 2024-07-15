@@ -12,15 +12,18 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.delay
 import org.jetbrains.compose.ui.tooling.preview.Preview
+import org.koin.compose.viewmodel.koinViewModel
+import org.koin.core.annotation.KoinExperimentalAPI
 import ui.common.*
 import viewmodels.MainUiEvent
 import viewmodels.MainViewModel
 import viewmodels.UiState
 
+@OptIn(KoinExperimentalAPI::class)
 @Composable
 @Preview
 fun MainScreen() {
-    val viewModel: MainViewModel = MainViewModel.getInstance()
+    val viewModel: MainViewModel = koinViewModel<MainViewModel>()
     val uiEventHandler: MainUiEvent = viewModel
     val uiState: UiState by viewModel.uiState.collectAsState()
 

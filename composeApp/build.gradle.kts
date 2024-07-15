@@ -48,6 +48,9 @@ kotlin {
             implementation(libs.viewmodel)
             implementation(libs.datetime)
             implementation(libs.coroutines)
+            implementation(libs.koin.core)
+            implementation(libs.koin.compose)
+            implementation(libs.koin.composeVM)
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)

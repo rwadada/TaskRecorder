@@ -126,17 +126,6 @@ class MainViewModel : ViewModel(), MainUiEvent {
             }
         }
     }
-
-    companion object {
-        // FIXME: KMPでのInjectionやViewModelProviderの扱いがDesktopの場合で分からなかったので苦肉の策
-        private var instance: MainViewModel? = null
-        fun getInstance(): MainViewModel {
-            if (instance == null) {
-                instance = MainViewModel()
-            }
-            return instance!!
-        }
-    }
 }
 
 interface MainUiEvent {
